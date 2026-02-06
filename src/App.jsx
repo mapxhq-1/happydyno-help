@@ -1,8 +1,8 @@
-import Chat from './components/Chat.tsx'
+import HelpCenter from "./Pages/HelpCenter"
 function App() {
   return (
     <>
-      <Chat></Chat>
+    <HelpCenter/>
     </>
   )
 }
