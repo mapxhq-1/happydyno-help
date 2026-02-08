@@ -116,8 +116,8 @@ export default function VideoFeed() {
 
   const videos = [
     { id: "1162830684", title: "Welcome to Happy Dyno" },
-    { id: "1162830764", title: "Lets create a new project!!" },
-    { id: "1162830764", title: "The Third" },
+    { id: "1162830764", title: "Let's create a new project!!" },
+    { id: "1162924210", title: "Time travel using timeline" },
   ];
 
   const filteredVideos = videos.filter(v => 
@@ -145,9 +145,9 @@ export default function VideoFeed() {
           
           {/* 1. Left: Home + Logo (Order 1) */}
           <DepthPill href="https://app.happydyno.com" className="order-1 w-auto hover:bg-[#3f3f46]">
-            <Home size={18} className="mr-2 md:mr-3 text-zinc-500 group-hover:text-white transition-colors" />
-            <span className="text-sm md:text-xl text-white pt-1" style={{ fontFamily: '"Potta One", cursive' }}>
-              HAPPY DYNO
+            <Home size={22} className="mr-2 md:mr-3 text-zinc-500 group-hover:text-white transition-colors mt-1" />
+            <span className="text-sm md:text-xl text-white pt-1 tracking-widest" style={{ fontFamily: '"Potta One", cursive' }}>
+              Happy Dyno
             </span>
           </DepthPill>
 
