@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Home, ExternalLink } from 'lucide-react';
 import Bg from './Background'; 
-
+import { 
+  Home, ExternalLink,
+  History, Bot,
+  LogIn, CirclePlus, LayoutDashboard, PanelRight,
+} from "lucide-react";
 // 1. Standard Dark Pill
 const DepthPill = ({ children, className = "", onClick, href }) => {
   const Component = href ? motion.a : motion.div;
@@ -63,6 +66,7 @@ const ActionPill = ({ children, className = "", onClick, href }) => {
 const VideoCard = ({ vimeoId, title, index }) => {
   return (
     <motion.div
+      id={`video-${vimeoId}`}
       initial={{ opacity: 0, y: 60, scale: 0.95 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -104,6 +108,56 @@ const VideoCard = ({ vimeoId, title, index }) => {
   );
 };
 
+const IconPill = ({ children, onClick, label, className = "" }) => {
+  const newLabel = label.split('|')[1].trim();
+  return (
+    <motion.div
+      onClick={onClick}
+      whileHover={{ scale: 1.08, y: -2 }}
+      whileTap={{ scale: 0.95 }}
+      className={`
+        relative group
+        flex items-center justify-center
+        w-12 h-12 md:w-16 md:h-16
+        bg-[#27272a]/90 backdrop-blur-md mt-10 md:mt-0
+        border-t border-white/10
+        border-b border-black
+        shadow-lg shadow-black/50
+        rounded-full
+        text-zinc-400 hover:text-white
+        transition-all duration-300
+        cursor-pointer select-none
+        ${className}
+      `}
+    >
+      {children}
+
+      {/* Tooltip */}
+      <span
+        className="
+          absolute -bottom-9
+          px-3 py-1.5
+          text-xs md:text-sm
+          bg-[#18181b]
+          border border-white/10
+          text-white
+          rounded-full
+          opacity-0 translate-y-2
+          group-hover:opacity-100
+          group-hover:translate-y-0
+          transition-all duration-300
+          whitespace-nowrap
+          pointer-events-none
+          shadow-md shadow-black/40
+        "
+      >
+        {newLabel}
+      </span>
+    </motion.div>
+  );
+};
+
+
 export default function VideoFeed() {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -113,11 +167,24 @@ export default function VideoFeed() {
     }
     window.scrollTo(0, 0);
   }, []);
+  
+  const scrollToVideo = (id) => {
+  const element = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+};
 
   const videos = [
-    { id: "1162830684", title: "Welcome to Happy Dyno" },
-    { id: "1162830764", title: "Let's create a new project!!" },
-    { id: "1162924210", title: "Time travel using timeline" },
+    { id: "1162830684", title: "Welcome to Happy Dyno | Login", icon: LogIn },
+    { id: "1162830764", title: "Let's create a new project!! | New project", icon: CirclePlus },
+    { id: "1162924210", title: "Time travel using timeline | Timeline", icon: History },
+    { id: "1164906487", title: "Project Control Made Easy | Project management page", icon: LayoutDashboard },
+    { id: "1164906394", title: "Your Space for Notes, Hyperlinks & Images | Right panel", icon: PanelRight },
+    { id: "1164917351", title: "FlyTo Your Answers with Dyno | Chatbot", icon: Bot },
   ];
 
   const filteredVideos = videos.filter(v => 
@@ -184,7 +251,28 @@ export default function VideoFeed() {
           - Mobile Header is now shorter (2 rows), so changed pt to 'pt-48' (12rem)
           - Desktop stays around 'pt-40'
       */}
-      <main className="relative z-10 pt-48 md:pt-40 pb-20 px-4 flex flex-col items-center min-h-screen">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="relative z-20 mt-32 flex flex-wrap justify-center gap-5 px-4"
+      >
+        {videos.map((video, i) => {
+          const Icon = video.icon;
+
+          return (
+            <IconPill
+              key={video.id}
+              label={video.title}
+              onClick={() => scrollToVideo(`video-${video.id}`)}
+            >
+              <Icon size={26} /> {/* 👈 bigger icon now */}
+            </IconPill>
+          );
+        })}
+      </motion.div>
+
+      <main className="relative z-10 pt-10 md:pt-10 pb-20 px-4 flex flex-col items-center min-h-screen">
         
         {filteredVideos.length > 0 ? (
           filteredVideos.map((video, index) => (
